@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano 12 Semanas — Fase 1 Maratona</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --card: #161616;
+    --border: #222222;
+    --accent: #e8ff47;
+    --accent2: #ff6b35;
+    --text: #f0f0f0;
+    --muted: #666;
+    --run: #e8ff47;
+    --rest: #2a2a2a;
+    --longo: #ff6b35;
+    --tempo: #4ecdc4;
+    --fartlek: #a78bfa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 60px 24px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero::before {
+    content: 'FASE 01';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 20vw, 180px);
+    color: #ffffff08;
+    position: absolute;
+    top: 0;
+    right: -20px;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 10vw, 88px);
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    margin-bottom: 16px;
+  }
+
+  h1 span {
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 480px;
+    margin-bottom: 40px;
+  }
+
+  /* STATS ROW */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    max-width: 900px;
+    margin: 0 auto 48px;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--accent);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-lbl {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto 32px;
+    padding: 0 24px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* WEEK BLOCKS */
+  .weeks {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .phase-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    padding: 24px 0 8px;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+
+  .phase-label:first-child {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .week {
+    background: var(--card);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+
+  .week:hover {
+    border-color: #333;
+  }
+
+  .week.open {
+    border-color: var(--accent);
+  }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 16px;
+    user-select: none;
+  }
+
+  .week-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--accent);
+    min-width: 48px;
+    line-height: 1;
+  }
+
+  .week-title {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  .week-km {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .week-km strong {
+    color: var(--accent);
+    font-size: 15px;
+  }
+
+  .week-arrow {
+    font-size: 12px;
+    color: var(--muted);
+    transition: transform 0.25s;
+  }
+
+  .week.open .week-arrow {
+    transform: rotate(180deg);
+    color: var(--accent);
+  }
+
+  .week-body {
+    display: none;
+    padding: 0 20px 20px;
+  }
+
+  .week.open .week-body {
+    display: block;
+  }
+
+  /* DAYS GRID */
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 600px) {
+    .days {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .day {
+    border-radius: 2px;
+    padding: 10px 8px;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .day-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .day-type {
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  .day-detail {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: auto;
+  }
+
+  .day.rest-day {
+    background: #111;
+    border: 1px solid #1a1a1a;
+  }
+
+  .day.rest-day .day-type { color: #333; }
+
+  .day.run-day { background: #1a1d00; border: 1px solid #2d3300; }
+  .day.run-day .day-type { color: var(--run); }
+
+  .day.longo-day { background: #1f1108; border: 1px solid #3d2210; }
+  .day.longo-day .day-type { color: var(--longo); }
+
+  .day.tempo-day { background: #081a19; border: 1px solid #103330; }
+  .day.tempo-day .day-type { color: var(--tempo); }
+
+  .day.fartlek-day { background: #120f1f; border: 1px solid #221a3a; }
+  .day.fartlek-day .day-type { color: var(--fartlek); }
+
+  /* TIPS */
+  .tip-box {
+    background: #0d0d0d;
+    border-left: 2px solid var(--accent);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .tip-box strong {
+    color: var(--text);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* NUTRITION */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.03em;
+    margin-bottom: 20px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-title span { color: var(--accent); }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+  }
+
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .info-card h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .info-card ul {
+    list-style: none;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  .info-card ul li::before {
+    content: '→ ';
+    color: var(--accent);
+  }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+    font-size: 12px;
+    color: #333;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Plano personalizado · 24 anos · 57kg · Base 20km/sem</div>
+  <h1>12 SEMANAS<br><span>FASE 1</span><br>MARATONA</h1>
+  <p class="hero-sub">Construção de base aeróbica, correção de mobilidade e introdução a estímulos de qualidade. Objetivo: chegar em 40–45km/semana com consistência.</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><span class="stat-val">20</span><div class="stat-lbl">km/sem inicial</div></div>
+  <div class="stat"><span class="stat-val">42</span><div class="stat-lbl">km/sem final</div></div>
+  <div class="stat"><span class="stat-val">4</span><div class="stat-lbl">treinos/semana</div></div>
+  <div class="stat"><span class="stat-val">5:20</span><div class="stat-lbl">pace base atual</div></div>
+  <div class="stat"><span class="stat-val">4:45</span><div class="stat-lbl">pace alvo final</div></div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot" style="background:var(--run)"></div> Corrida leve (Z2)</div>
+  <div class="legend-item"><div class="dot" style="background:var(--longo)"></div> Longão</div>
+  <div class="legend-item"><div class="dot" style="background:var(--tempo)"></div> Tempo run</div>
+  <div class="legend-item"><div class="dot" style="background:var(--fartlek)"></div> Fartlek / tiros</div>
+  <div class="legend-item"><div class="dot" style="background:#333"></div> Descanso / mobilidade</div>
+</div>
+
+<div class="weeks" id="weeks-container"></div>
+
+<div class="section">
+  <div class="section-title">ALIMENTAÇÃO & <span>SUPLEMENTOS</span></div>
+  <div class="cards">
+    <div class="info-card">
+      <h4>Dias de treino</h4>
+      <ul>
+        <li>Carboidrato 1–2h antes</li>
+        <li>Banana ou tapioca pré</li>
+        <li>Refeição completa pós (arroz, proteína, vegetal)</li>
+        <li>Hidratação: 35ml/kg/dia</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>Longão (+14km)</h4>
+      <ul>
+        <li>Café da manhã reforçado</li>
+        <li>Gel ou banana após 60 min</li>
+        <li>Reidratação pós com eletrólitos</li>
+        <li>Refeição rica em proteína no almoço</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>Suplementos essenciais</h4>
+      <ul>
+        <li>Creatina 3–5g/dia (barato e eficaz)</li>
+        <li>Vitamina D + Magnésio</li>
+        <li>Whey pós-treino (se necessário)</li>
+        <li>Cafeína pré-treino (opcional)</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>O que evitar</h4>
+      <ul>
+        <li>Treinar em jejum nos longões</li>
+        <li>Dieta muito restritiva</li>
+        <li>Suplementos desnecessários</li>
+        <li>Álcool em excesso na véspera</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">MOBILIDADE & <span>TRAVAMENTO</span></div>
+  <div class="cards">
+    <div class="info-card">
+      <h4>Rotina 10min pós-treino</h4>
+      <ul>
+        <li>Panturrilha na parede (30s cada)</li>
+        <li>Hip flexor em afundo (30s)</li>
+        <li>Pigeon pose (45s cada lado)</li>
+        <li>Agachamento profundo pausado</li>
+        <li>Rotação de quadril deitado</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>Exercícios de força</h4>
+      <ul>
+        <li>Agachamento unilateral (búlgaro)</li>
+        <li>Elevação de panturrilha</li>
+        <li>Ponte de glúteo</li>
+        <li>Prancha lateral</li>
+        <li>2x/semana · 15–20 min</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  Plano montado com base no seu perfil atual. Reavalie e ajuste ao final de cada bloco de 4 semanas. Escute seu corpo — dor aguda = parar.
+</div>
+
+<script>
+const weeks = [
+  // BLOCO 1 — Semanas 1–4: Adaptação
+  {
+    num: 1, phase: "BLOCO 1 — ADAPTAÇÃO (sem 1–4)", title: "Estabelecendo o ritmo", km: 22,
+    focus: "Correr tudo no pace confortável. Não force. Adicionar mobilidade diária.",
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Mobilidade 10min", cls: "rest-day" },
+      { name: "TER", type: "Corrida leve", detail: "5km · pace livre", cls: "run-day" },
+      { name: "QUA", type: "Descanso", detail: "Alongamento", cls: "rest-day" },
+      { name: "QUI", type: "Corrida leve", detail: "6km · Z2", cls: "run-day" },
+      { name: "SEX", type: "Descanso", detail: "Força 15min", cls: "rest-day" },
+      { name: "SAB", type: "Longão", detail: "8km · devagar", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Recuperação ativa", cls: "rest-day" },
+    ]
+  },
+  {
+    num: 2, title: "Consolidando a base", km: 24,
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Mobilidade 10min", cls: "rest-day" },
+      { name: "TER", type: "Corrida leve", detail: "5km · Z2", cls: "run-day" },
+      { name: "QUA", type: "Descanso", detail: "Força 15min", cls: "rest-day" },
+      { name: "QUI", type: "Corrida leve", detail: "7km · pace leve", cls: "run-day" },
+      { name: "SEX", type: "Descanso", detail: "Mobilidade", cls: "rest-day" },
+      { name: "SAB", type: "Longão", detail: "9km · cadência suave", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Descanso total", cls: "rest-day" },
+    ]
+  },
+  {
+    num: 3, title: "Primeiro fartlek", km: 27,
+    focus: "Introdução ao fartlek: alterne 1min rápido / 2min leve durante 20min.",
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Mobilidade", cls: "rest-day" },
+      { name: "TER", type: "Fartlek", detail: "5km c/ tiros 1:2", cls: "fartlek-day" },
+      { name: "QUA", type: "Descanso", detail: "Força 15min", cls: "rest-day" },
+      { name: "QUI", type: "Corrida leve", detail: "7km · Z2", cls: "run-day" },
+      { name: "SEX", type: "Descanso", detail: "Mobilidade", cls: "rest-day" },
+      { name: "SAB", type: "Longão", detail: "10km · ritmo conversa", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Recuperação ativa", cls: "rest-day" },
+    ]
+  },
+  {
+    num: 4, title: "Semana de recuo", km: 22,
+    focus: "Semana de descarga: volume baixa 20%. Corpo absorve o treino.",
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Descanso total", cls: "rest-day" },
+      { name: "TER", type: "Corrida leve", detail: "4km · muito leve", cls: "run-day" },
+      { name: "QUA", type: "Descanso", detail: "Mobilidade longa", cls: "rest-day" },
+      { name: "QUI", type: "Corrida leve", detail: "6km · Z2", cls: "run-day" },
+      { name: "SEX", type: "Descanso", detail: "Força suave", cls: "rest-day" },
+      { name: "SAB", type: "Longão", detail: "8km · fácil", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Descanso", cls: "rest-day" },
+    ]
+  },
+  // BLOCO 2 — Semanas 5–8: Desenvolvimento
+  {
+    num: 5, phase: "BLOCO 2 — DESENVOLVIMENTO (sem 5–8)", title: "Aumentando o volume", km: 30,
+    focus: "Longões ficam mais longos. Introdução ao tempo run (ritmo moderado sustentado).",
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Mobilidade", cls: "rest-day" },
+      { name: "TER", type: "Corrida leve", detail: "6km · Z2", cls: "run-day" },
+      { name: "QUA", type: "Tempo run", detail: "5km · pace 5:00", cls: "tempo-day" },
+      { name: "QUI", type: "Descanso", detail: "Força 20min", cls: "rest-day" },
+      { name: "SEX", type: "Corrida leve", detail: "5km · recovery", cls: "run-day" },
+      { name: "SAB", type: "Longão", detail: "12km · devagar", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Descanso", cls: "rest-day" },
+    ]
+  },
+  {
+    num: 6, title: "Volume crescente", km: 33,
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Mobilidade", cls: "rest-day" },
+      { name: "TER", type: "Fartlek", detail: "6km · tiros 1:1", cls: "fartlek-day" },
+      { name: "QUA", type: "Corrida leve", detail: "5km · Z2", cls: "run-day" },
+      { name: "QUI", type: "Descanso", detail: "Força 20min", cls: "rest-day" },
+      { name: "SEX", type: "Corrida leve", detail: "6km · leve", cls: "run-day" },
+      { name: "SAB", type: "Longão", detail: "14km · ritmo leve", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Descanso", cls: "rest-day" },
+    ]
+  },
+  {
+    num: 7, title: "Pico do bloco 2", km: 36,
+    focus: "Semana mais pesada do bloco. Priorize o sono e a alimentação.",
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Mobilidade", cls: "rest-day" },
+      { name: "TER", type: "Tempo run", detail: "7km · pace 5:00", cls: "tempo-day" },
+      { name: "QUA", type: "Corrida leve", detail: "6km · Z2", cls: "run-day" },
+      { name: "QUI", type: "Descanso", detail: "Força 20min", cls: "rest-day" },
+      { name: "SEX", type: "Corrida leve", detail: "6km · leve", cls: "run-day" },
+      { name: "SAB", type: "Longão", detail: "16km · cadência suave", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Descanso total", cls: "rest-day" },
+    ]
+  },
+  {
+    num: 8, title: "Semana de recuo", km: 28,
+    focus: "Volume baixa de novo. Aproveite para refletir: o que melhorou? O que ainda dói?",
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Descanso total", cls: "rest-day" },
+      { name: "TER", type: "Corrida leve", detail: "5km · Z2", cls: "run-day" },
+      { name: "QUA", type: "Descanso", detail: "Mobilidade longa", cls: "rest-day" },
+      { name: "QUI", type: "Corrida leve", detail: "7km · pace livre", cls: "run-day" },
+      { name: "SEX", type: "Descanso", detail: "Força suave", cls: "rest-day" },
+      { name: "SAB", type: "Longão", detail: "12km · fácil", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Descanso", cls: "rest-day" },
+    ]
+  },
+  // BLOCO 3 — Semanas 9–12: Consolidação
+  {
+    num: 9, phase: "BLOCO 3 — CONSOLIDAÇÃO (sem 9–12)", title: "Qualidade + volume", km: 38,
+    focus: "Treinos de qualidade mais longos. Tiros com menos recuperação.",
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Mobilidade", cls: "rest-day" },
+      { name: "TER", type: "Fartlek", detail: "7km · tiros progressivos", cls: "fartlek-day" },
+      { name: "QUA", type: "Corrida leve", detail: "6km · Z2", cls: "run-day" },
+      { name: "QUI", type: "Descanso", detail: "Força 20min", cls: "rest-day" },
+      { name: "SEX", type: "Tempo run", detail: "7km · pace 4:55", cls: "tempo-day" },
+      { name: "SAB", type: "Longão", detail: "17km · leve a moderado", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Descanso", cls: "rest-day" },
+    ]
+  },
+  {
+    num: 10, title: "Volume máximo fase 1", km: 40,
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Mobilidade", cls: "rest-day" },
+      { name: "TER", type: "Corrida leve", detail: "7km · Z2", cls: "run-day" },
+      { name: "QUA", type: "Tempo run", detail: "8km · pace 4:55", cls: "tempo-day" },
+      { name: "QUI", type: "Descanso", detail: "Força 20min", cls: "rest-day" },
+      { name: "SEX", type: "Corrida leve", detail: "6km · recovery", cls: "run-day" },
+      { name: "SAB", type: "Longão", detail: "18km · ritmo leve", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Descanso total", cls: "rest-day" },
+    ]
+  },
+  {
+    num: 11, title: "Simulação de prova", km: 42,
+    focus: "Faça um 10k em ritmo de prova no sábado. Avalie seu pace real.",
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Descanso", cls: "rest-day" },
+      { name: "TER", type: "Fartlek", detail: "7km · intensidade média", cls: "fartlek-day" },
+      { name: "QUA", type: "Corrida leve", detail: "8km · Z2", cls: "run-day" },
+      { name: "QUI", type: "Descanso", detail: "Descanso / mobilidade", cls: "rest-day" },
+      { name: "SEX", type: "Corrida leve", detail: "5km · muito leve", cls: "run-day" },
+      { name: "SAB", type: "Longão", detail: "20km ou 10k esforçado", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Recuperação total", cls: "rest-day" },
+    ]
+  },
+  {
+    num: 12, title: "Semana de avaliação", km: 30,
+    focus: "Volume baixa. Avalie tudo: pace, sensação, o que melhorou. Planeje a Fase 2.",
+    days: [
+      { name: "SEG", type: "Descanso", detail: "Descanso total", cls: "rest-day" },
+      { name: "TER", type: "Corrida leve", detail: "5km · Z2", cls: "run-day" },
+      { name: "QUA", type: "Descanso", detail: "Mobilidade longa", cls: "rest-day" },
+      { name: "QUI", type: "Corrida leve", detail: "6km · pace confortável", cls: "run-day" },
+      { name: "SEX", type: "Descanso", detail: "Reflexão + força leve", cls: "rest-day" },
+      { name: "SAB", type: "Longão", detail: "14km · fácil e consciente", cls: "longo-day" },
+      { name: "DOM", type: "Descanso", detail: "Descanso", cls: "rest-day" },
+    ]
+  },
+];
+
+const container = document.getElementById('weeks-container');
+
+let currentPhase = null;
+
+weeks.forEach((week, i) => {
+  if (week.phase) {
+    const pl = document.createElement('div');
+    pl.className = 'phase-label';
+    pl.textContent = week.phase;
+    container.appendChild(pl);
+  }
+
+  const w = document.createElement('div');
+  w.className = 'week';
+  w.innerHTML = `
+    <div class="week-header">
+      <div class="week-num">S${String(week.num).padStart(2,'0')}</div>
+      <div class="week-title">${week.title}</div>
+      <div class="week-km"><strong>${week.km}</strong> km</div>
+      <div class="week-arrow">▼</div>
+    </div>
+    <div class="week-body">
+      <div class="days">
+        ${week.days.map(d => `
+          <div class="day ${d.cls}">
+            <div class="day-name">${d.name}</div>
+            <div class="day-type">${d.type}</div>
+            <div class="day-detail">${d.detail}</div>
+          </div>
+        `).join('')}
+      </div>
+      ${week.focus ? `<div class="tip-box"><strong>Foco da semana</strong>${week.focus}</div>` : ''}
+    </div>
+  `;
+
+  w.addEventListener('click', () => {
+    const isOpen = w.classList.contains('open');
+    document.querySelectorAll('.week').forEach(el => el.classList.remove('open'));
+    if (!isOpen) w.classList.add('open');
+  });
+
+  container.appendChild(w);
+});
+
+// open first week by default
+container.querySelector('.week').classList.add('open');
+</script>
+</body>
+</html>
