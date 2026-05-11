@@ -6,18 +6,132 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Bulking Davi">
-  <meta name="theme-color" content="#0E0E0E">
+  <meta name="theme-color" content="#0E0E0E0E">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  //fonts.googleapis.com">
+  //fonts.gstatic.com" crossorigigin>
+  //fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheetet">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="icon-180.png">
-  <link rel="manifest" href="manifest.json">
+ ">
 
-  <title>Maratona</title>
+  >
+  /png" sizes="32x32" href="icon-v2-180.png?v=2">
+  >
+
+  <title>Bulking Davi</title>
+  <style>
+    :root { --green:#C8F135; --dark:#0E0E0E; --card:#161616; --card2:#1E1E1E; --muted:#555; --text:#F0F0F0; --sub:#888; }
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body { background:var(--dark); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
+    .hidden { display:none !important; }
+    .auth-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background: radial-gradient(circle at top, #1b2300, #0E0E0E 60%); }
+    .auth-card { width:100%; max-width:420px; background:rgba(22,22,22,.96); border:1px solid #262626; border-radius:20px; padding:24px; box-shadow:0 20px 60px rgba(0,0,0,.35); }
+    .auth-kicker { font-size:11px; letter-spacing:3px; color:var(--sub); text-transform:uppercase; margin-bottom:10px; }
+    .auth-title { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:2px; line-height:1; }
+    .auth-title span { color:var(--green); }
+    .auth-sub { color:var(--sub); font-size:13px; margin:10px 0 18px; line-height:1.5; }
+    .auth-row { display:flex; gap:10px; }
+    .auth-input { flex:1; background:#222; border:1.5px solid #333; border-radius:12px; padding:13px 16px; color:var(--text); font-size:16px; outline:none; }
+    .auth-input:focus { border-color:var(--green); }
+    .btn { border:none; border-radius:12px; padding:13px 18px; font-weight:700; font-size:14px; cursor:pointer; }
+    .btn-primary { background:var(--green); color:var(--dark); }
+    .btn-secondary { background:#222; color:var(--text); border:1px solid #333; }
+    .auth-note { margin-top:12px; font-size:12px; color:var(--sub); line-height:1.45; }
+    .auth-error { display:none; margin-top:12px; background:#2a120f; border:1px solid #4a1d18; color:#ff8f84; padding:10px 12px; border-radius:10px; font-size:13px; }
+    .app-shell { display:none; }
+    .header { padding:56px 20px 16px; background:var(--dark); position:sticky; top:0; z-index:100; border-bottom:1px solid #1a1a1a; }
+    .header-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+    .header h1 { font-family:'Bebas Neue',sans-serif; font-size:36px; letter-spacing:2px; line-height:1; }
+    .header h1 span { color:var(--green); }
+    .header p { font-size:12px; color:var(--sub); margin-top:2px; }
+    .badge { background:var(--green); color:var(--dark); font-size:10px; font-weight:700; padding:4px 10px; border-radius:20px; letter-spacing:1px; white-space:nowrap; }
+    .nav { display:flex; gap:6px; padding:12px 20px 0; overflow-x:auto; scrollbar-width:none; }
+    .nav::-webkit-scrollbar { display:none; }
+    .nav-btn { padding:8px 16px; border-radius:20px; border:1.5px solid #2a2a2a; background:transparent; color:var(--sub); font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; white-space:nowrap; cursor:pointer; transition:all .2s; }
+    .nav-btn.active { background:var(--green); border-color:var(--green); color:var(--dark); font-weight:700; }
+    .page { display:none; padding:20px; padding-bottom:40px; }
+    .page.active { display:block; animation:fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .card { background:var(--card); border-radius:16px; padding:18px; margin-bottom:12px; border:1px solid #222; }
+    .card-label { font-size:10px; font-weight:700; letter-spacing:2px; color:var(--sub); text-transform:uppercase; margin-bottom:6px; }
+    .card-value { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--green); line-height:1; }
+    .card-value span { font-size:18px; color:var(--sub); font-family:'DM Sans',sans-serif; font-weight:300; }
+    .stats-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+    .stat-card { background:var(--card); border-radius:14px; padding:16px; border:1px solid #222; }
+    .stat-card .label { font-size:10px; color:var(--sub); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+    .stat-card .value { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--text); line-height:1; }
+    .stat-card .value.green { color:var(--green); }
+    .stat-card .unit { font-size:12px; color:var(--sub); font-family:'DM Sans',sans-serif; }
+    .section-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; margin-bottom:12px; margin-top:20px; color:var(--text); }
+    .section-title span { color:var(--green); }
+    .progress-info { display:flex; justify-content:space-between; margin-bottom:6px; }
+    .progress-info span, .progress-info strong { font-size:12px; }
+    .progress-info span { color:var(--sub); }
+    .progress-info strong { color:var(--text); }
+    .progress-bar { background:#222; border-radius:10px; height:8px; overflow:hidden; }
+    .progress-fill { background:var(--green); height:100%; border-radius:10px; transition:width 1s ease; }
+    .day-card { background:var(--card); border-radius:16px; margin-bottom:12px; overflow:hidden; border:1px solid #222; }
+    .day-header { padding:16px 18px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+    .day-header-left { display:flex; align-items:center; gap:12px; }
+    .day-num { background:var(--green); color:var(--dark); font-family:'Bebas Neue',sans-serif; font-size:20px; width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; }
+    .day-info h3 { font-size:14px; font-weight:600; color:var(--text); }
+    .day-info p { font-size:11px; color:var(--sub); margin-top:1px; }
+    .day-arrow { color:var(--sub); font-size:18px; transition:transform .3s; }
+    .day-arrow.open { transform:rotate(180deg); }
+    .day-exercises { display:none; border-top:1px solid #222; }
+    .day-exercises.open { display:block; }
+    .exercise-row { padding:12px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1a1a1a; }
+    .exercise-row:last-child { border-bottom:none; }
+    .exercise-name { font-size:13px; color:var(--text); font-weight:500; }
+    .exercise-detail { font-size:11px; color:var(--sub); margin-top:2px; }
+    .exercise-badge { background:#222; color:var(--green); font-size:11px; font-weight:700; padding:4px 10px; border-radius:8px; white-space:nowrap; }
+    .warn-tag { background:#2a2000; color:#FFD700; font-size:10px; padding:2px 8px; border-radius:6px; margin-left:8px; font-weight:500; }
+    .meal-card { background:var(--card); border-radius:16px; padding:16px 18px; margin-bottom:10px; border:1px solid #222; display:flex; align-items:flex-start; gap:14px; }
+    .meal-icon { font-size:28px; line-height:1; flex-shrink:0; margin-top:2px; }
+    .meal-info { flex:1; }
+    .meal-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:4px; }
+    .meal-desc { font-size:12px; color:var(--sub); line-height:1.5; }
+    .meal-kcal { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--green); flex-shrink:0; line-height:1; margin-top:2px; }
+    .meal-kcal span { font-size:11px; color:var(--sub); font-family:'DM Sans',sans-serif; display:block; text-align:right; }
+    .macro-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px; }
+    .macro-card { background:var(--card); border-radius:12px; padding:14px 12px; text-align:center; border:1px solid #222; }
+    .macro-card .m-val { font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--green); }
+    .macro-card .m-label { font-size:10px; color:var(--sub); text-transform:uppercase; letter-spacing:1px; }
+    .weight-input-card { background:var(--card); border-radius:16px; padding:20px; margin-bottom:12px; border:1px solid #222; }
+    .weight-input-card label { font-size:11px; color:var(--sub); letter-spacing:2px; text-transform:uppercase; display:block; margin-bottom:10px; }
+    .input-row { display:flex; gap:10px; }
+    .weight-input-card input { flex:1; background:#222; border:1.5px solid #333; border-radius:12px; padding:12px 16px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:16px; outline:none; transition:border-color .2s; }
+    .weight-input-card input:focus { border-color:var(--green); }
+    .weight-input-card input::placeholder { color:var(--muted); }
+    .btn-add { background:var(--green); color:var(--dark); border:none; border-radius:12px; padding:12px 20px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:14px; cursor:pointer; transition:opacity .2s; }
+    .weight-row { background:var(--card); border-radius:12px; padding:14px 16px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; border:1px solid #222; animation:fadeIn .3s ease; }
+    .weight-row .w-date { font-size:12px; color:var(--sub); }
+    .weight-row .w-week { font-size:13px; font-weight:600; color:var(--text); }
+    .weight-row .w-val { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--green); }
+    .weight-row .w-diff { font-size:12px; text-align:right; }
+    .w-diff.up { color:var(--green); }
+    .w-diff.down { color:#FF4444; }
+    .w-diff.same { color:var(--sub); }
+    .mes-card { background:var(--card); border-radius:16px; overflow:hidden; margin-bottom:12px; border:1px solid #222; }
+    .mes-header { padding:14px 18px; display:flex; align-items:center; gap:12px; }
+    .mes-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+    .mes-header h3 { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:1px; }
+    .mes-header p { font-size:11px; color:var(--sub); margin-top:1px; }
+    .mes-body { padding:0 18px 16px; }
+    .mes-item { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #1a1a1a; }
+    .mes-item:last-child { border-bottom:none; }
+    .mes-item .mi-key { font-size:12px; color:var(--sub); }
+    .mes-item .mi-val { font-size:12px; font-weight:600; color:var(--text); }
+    .empty-state { text-align:center; padding:40px 20px; color:var(--sub); font-size:14px; }
+    .empty-icon { font-size:40px; margin-bottom:10px; }
+    .chart-wrap { background:var(--card); border-radius:16px; padding:18px; margin-bottom:12px; border:1px solid #222; }
+    .chart-title { font-size:12px; color:var(--sub); letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; }
+    canvas { width:100% !important; }
+    .footer-note { margin-top:14px; font-size:12px; color:var(--sub); line-height:1.45; }
+  </style>
 </head>
+</body>
+</html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Plano 12 Semanas — Fase 1 Maratona</title>
